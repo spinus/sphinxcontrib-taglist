@@ -1,0 +1,114 @@
+Sphinx "taglist" extension.
+
+TagList
+=======
+
+Taglist is an extension to Sphinx documentation system.
+
+.. note:: 
+
+    The project it is a totally copy of sphinxcontrib-requirements with
+    some modifications
+
+Installation
+------------
+
+Instalation through pip: ::
+
+    pip install sphinxcontrib-taglist
+
+or through github: ::
+
+    git clone https://github.com/spinus/sphinxcontrib-taglist
+    cd sphinxcontrib-taglist
+    python setup.py install
+
+Next, you have to add extension to 'conf.py' in your sphinx project. ::
+
+    extensions = [
+              ...,
+              'sphinxcontrib.taglist',  
+              ...]
+
+
+Configuration
+-------------
+
+When using `tags` with this extension you may want give each tag other color.
+You can do that in 'conf.py' by adding: ::
+
+    taglist_tags = {
+        'tag1': {'background-color': 'green'}
+    }
+
+
+Directives
+----------
+
+tag:
+    tag directive add a 'piece' of information, and you can tag it.
+
+    You can use it like: ::
+
+        .. tag:: Some tagged information
+            :tag: tag1 tag2 tag3 
+
+    or: ::
+
+        .. tag:: [tag1 tag2 tag3] Some tagged information
+
+    .. warning:: 
+
+        Second method is used only if first method is not.
+
+    .. warning:: 
+
+        I am not sure this syntax, it may change. 
+        If you have anny suggestions please let me know.
+
+taglist:
+    taglist is a directive which `catch` tags and do a list.
+
+    Firstly it prints 'Tags: ...' with information which tags it displays, and 
+    than it shows the list.
+
+    You can use it like: ::
+        
+        .. taglist::
+            :tags: tag1 tag3
+
+How it works?
+-------------
+
+The codebase is derived from `sphinxcontrib-requirements` so it works in similar
+way.
+
+During document reading `tag` directives create `tag_node`s.
+`taglist` create `taglist` nodes.
+
+During resolving `taglist` nodes are changed to a piece of text `Tags:` with
+tags items which will be displayed on that list.
+Next it prints all tagged items.
+
+
+CSS
+~~~
+
+taglist.css:
+    It contains base class for tag - taglist_tag
+
+    .. warning:: 
+
+        It probably will be changed and put in `taglist_tags.css`.
+        (And it will be configurable from `conf.py`)
+
+Additionally, it creates the file `taglist_tags.css` during processing (with
+css for each tag you defined in `conf.py`; `taglist_tags` maps all tag keys to
+css keys) and write it to build directory to static files.
+
+
+Questions and suggestions
+-------------------------
+
+If you have some suggstions, patches, problems - please write an email.
+
