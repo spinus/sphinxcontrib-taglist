@@ -86,7 +86,7 @@ class TagDirective(Directive):
 
         if not status and self.content and self.content[0]:
             x = self.content[0].strip()
-            res=re.match(r'^\[(.*)\](.*)$',x)
+            res=re.match(r'^\[(.*?)\](.*)$',x)
             if res:
                 status = res.group(1)
                 self.content[0]=res.group(2).strip()
