@@ -33,7 +33,7 @@ def tag_role(name, rawtext, text, lineno, inliner, options=None, content=[]):
     status = utils.unescape(text.strip().replace(' ','_'))
     options = options or {}
     options.setdefault('classes', [])
-    options['classes'] += ['taglist_tag', 'taglist_tag_%s'%status]
+    options['classes'] += ['taglist_tag_%s'%status, 'taglist_tag']
     node = nodes.emphasis(rawtext, status, **options)
     return [node], []
 
