@@ -10,8 +10,15 @@ from sphinx.util.osutil import copyfile
 
 
 CSS_FILE = 'taglist.css'
-CSS_FILE2 = 'taglist_tags.css'
-ALL_TAGS_TAG='__all__'
+ALL_TAGS_TAG = '__all__'
+CSS_DEFAULT = {
+    'padding': '0.2em 0.5ex',
+    'font-size': '0.8em',
+    'color': '#eee',
+    'background': '#555',
+    'border-radius': '5px',
+    'text-shadow': '0 0 2px white',
+}
 
 def get_tags(s):
     return list(filter(lambda x:x,
@@ -22,8 +29,7 @@ def get_tags(s):
        )
 
 
-
-def status_role(name, rawtext, text, lineno, inliner, options=None, content=[]):
+def tag_role(name, rawtext, text, lineno, inliner, options=None, content=[]):
     status = utils.unescape(text.strip().replace(' ','_'))
     options = options or {}
     options.setdefault('classes', [])
@@ -187,18 +193,21 @@ def depart_tag_node(self, node):
 
 def add_stylesheet(app):
     app.add_stylesheet(CSS_FILE)
-    app.add_stylesheet(CSS_FILE2)
 
 def copy_stylesheet(app, exception):
     if app.builder.name != 'html' or exception:
         return
-    app.info('Copying taglist stylesheet... ', nonl=True)
+    app.info('Generating taglist stylesheet... ', nonl=True)
     dest = os.path.join(app.builder.outdir, '_static', CSS_FILE)
-    dest2 = os.path.join(app.builder.outdir, '_static', CSS_FILE2)
-    source = os.path.join(os.path.abspath(os.path.dirname(__file__)), CSS_FILE)
-    copyfile(source, dest)
 
-    f = open(dest2,'w')
+    f = open(dest,'w')
+
+    #
+    f.write(".taglist_tag {\n")
+    conf = app.config.taglist_css or CSS_DEFAULT
+    for opt,val in conf.items():
+        f.write("%s: %s;\n"%(opt,val))
+    f.write("}\n")
 
     for tag, tag_dict in app.config.taglist_tags.items():
         f.write(".taglist_tag_%s {\n"%tag)
@@ -210,8 +219,9 @@ def copy_stylesheet(app, exception):
     app.info('done')
 
 def setup(app):
+    app.add_config_value('taglist_css',{},'env')
     app.add_config_value('taglist_tags',{},'env')
-    app.add_role('tag', status_role)
+    app.add_role('tag', tag_role)
     app.add_node(taglist)
     app.add_node(tag_node,
                  html=(visit_tag_node, depart_tag_node),
