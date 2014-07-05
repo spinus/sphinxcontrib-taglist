@@ -1,7 +1,14 @@
 Sphinx "taglist" extension.
 
+PROJECT IS NOT MAINTAINED, IT IS DEAD.
+
 TagList
 =======
+
+.. warning::
+
+    THE PROJECT IS DEPRECATED (NOT MAINTAINED ANYMORE)
+
 
 Taglist is an extension to Sphinx documentation system.
 
